@@ -3,14 +3,15 @@ import traceback
 import networkx as nx
 from app.services.graph_builder import build_graph_from_csv
 from app.services.detector import detect_cycles, detect_fan_in_out, detect_layered_shells, find_two_hop_exposed
-from app.services.gnn_engine import run_gnn_inference  # Real GNN
+# Temporarily comment out GNN import if it causes issues, but we'll keep it for now
+from app.services.gnn_engine import run_gnn_inference  # not used anymore
 from app.services.scorer import calculate_final_score
 from app.utils.helpers import flag_rapid_movement
 from app.models.schemas import AnalysisResponse, SuspiciousAccount, FraudRing, Summary
 
 def analyze_csv(csv_content: str):
     print("=" * 50)
-    print("Starting analyze_csv function")
+    print("Starting analyze_csv function (with dummy GNN scores)")
     start_time = time.time()
 
     try:
@@ -20,10 +21,10 @@ def analyze_csv(csv_content: str):
         total_accounts = G.number_of_nodes()
         print(f"Graph built: {total_accounts} nodes, {G.number_of_edges()} edges")
 
-        # Step 2: GNN inference (real)
-        print("Step 2: Running GNN inference...")
-        gnn_scores = run_gnn_inference(G)
-        print(f"GNN scores computed for {len(gnn_scores)} nodes")
+        # Step 2: Use dummy GNN scores (bypass actual GNN inference)
+        print("Step 2: Using dummy GNN scores (0.5 for every node)...")
+        gnn_scores = {node: 0.5 for node in G.nodes}
+        print(f"Dummy scores generated for {len(gnn_scores)} nodes")
 
         # Step 3: Rule-based detection
         print("Step 3: Running rule-based detection...")
